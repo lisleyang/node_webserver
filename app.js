@@ -43,6 +43,16 @@ const serverHandler = (req,res)=>{
         req.body = postData
 
         //处理blog路由
+        const blogResult = handleBlogRouter(req,res )
+        if(blogResult){
+            blogResult.then(blogData=>{
+                res.end(JSON.stringify(blogData))
+            })
+            return;
+
+        }
+        
+ 
         const blogData = handleBlogRouter(req,res )
         if(blogData){
             res.end(JSON.stringify(blogData))
