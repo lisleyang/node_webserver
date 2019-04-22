@@ -17,36 +17,54 @@ const handleBlogRouter = (req,res)=>{
     //获取博客详情
     if(method == 'GET' && req.path == '/api/blog/detail'){
         const id = req.query.id || '';
-        const listData = getDetail(id);
+        if(!id){
+            return new Promise((resolve,reject)=>{
+                resolve(new ErrorModel('必须传id'))
+            }) 
+        }
 
-        return new SuccessModel(listData)
+        const result = getDetail(id);
+
+        return result.then(data=>{
+            return new SuccessModel(data);
+        })
     }  
 
     //新建博客
     if(method == 'POST' && req.path == '/api/blog/new'){
-        const data = newBlog(req.body)
-        return new SuccessModel(data);
+
+        req.body.author = '张三'    //开发登陆时再改
+        const result = newBlog(req.body);
+
+        return result.then(data=>{
+            return new SuccessModel(data);
+        })
     }  
 
     //更新博客
     if(method == 'POST' && req.path == '/api/blog/update'){
         const result = updataBlog(req.query.id , req.body)
-        if(result){
-            return new SuccessModel();
-        }else{
-            return new ErrorModel('更新博客失败')
-        }
-        
+        return result.then(val=>{
+            console.log('val',val)
+            if(val){
+                return new SuccessModel('更新成功');
+            }else{
+                return new ErrorModel('更新博客失败')
+            }
+        })
     }  
 
     //删除博客
-    if(method == 'POST' && req.path == '/api/blog/del'){
-        const result = delBlog(req.query.id)
-        if(result){
-            return new SuccessModel()
-        }else{
-            return new ErrorModel('删除博客失败')
-        }
+    if(method == 'POST' && req.path == '/api/blog/delete'){
+        req.body.author = '张三'
+        const result = delBlog(req.body.id,req.body.author)
+        return result.then(val=>{
+            if(val){
+                return new SuccessModel('删除成功');
+            }else{
+                return new ErrorModel('删除博客失败')
+            }
+        })
     }    
 }
 
