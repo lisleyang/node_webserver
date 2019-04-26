@@ -45,7 +45,6 @@ const handleBlogRouter = (req,res)=>{
     if(method == 'POST' && req.path == '/api/blog/update'){
         const result = updataBlog(req.query.id , req.body)
         return result.then(val=>{
-            console.log('val',val)
             if(val){
                 return new SuccessModel('更新成功');
             }else{

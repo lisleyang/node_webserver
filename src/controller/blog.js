@@ -22,7 +22,6 @@ const getDetail = (id)=>{
 
 const newBlog = (blogData = {}) => {
     //blogData是一个博客对象，包含title content等属性
-    console.log('blogdata', blogData)
     const title = blogData.title;
     const content = blogData.content;
     const author = blogData.author;
@@ -34,7 +33,6 @@ const newBlog = (blogData = {}) => {
     `
 
     return exec(sql).then(insertData=>{
-        console.log('insertData',insertData)
 
         return {
             id : insertData.insertId
@@ -54,7 +52,6 @@ const updataBlog = (id , blogData = {}) => {
     `
 
     return exec(sql).then(updateData=>{
-        console.log('updataData',updateData);
 
         if(updateData.affectedRows > 0){
             return true;

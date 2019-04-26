@@ -17,7 +17,6 @@ con.query(sql,(err,result)=>{
         console.log(err);
         return;
     }
-    console.log(result);
 })
 
 con.end()

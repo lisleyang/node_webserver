@@ -1,5 +1,6 @@
 const {login} = require('../controller/user')
 const {SuccessModel,ErrorModel} = require('../model/resModel.js')
+const {get, set} = require('../db/redis')
 
 const handleUserRouter = (req,res)=>{
     const method = req.method;
@@ -14,6 +15,9 @@ const handleUserRouter = (req,res)=>{
                 req.session.username = data.username;
                 req.session.realname = data.realname;
 
+                //同步到redis中
+                set(req.sessionId, req.session)
+
                 return new SuccessModel('登陆成功') 
             }else{
                 return new ErrorModel('登陆失败')
@@ -23,7 +27,6 @@ const handleUserRouter = (req,res)=>{
 
     //验证登陆状态的一个接口
     if(method == 'GET' && req.path == '/api/user/login-test'){
-        console.log('req.session',req.session)
         
         if(req.session.username){
             return Promise.resolve(new SuccessModel({
