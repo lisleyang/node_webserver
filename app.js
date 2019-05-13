@@ -2,6 +2,7 @@ const handleBlogRouter = require('./src/router/blog.js')
 const handleUserRouter = require('./src/router/user.js')
 const qs = require('querystring')
 const {get , set} = require('./src/db/redis')
+const {access} = require('./src/utils/log')
 
 // let SESSION_DATA = {}
 
@@ -38,6 +39,9 @@ const getCookieExpires = ()=>{
 }
 
 const serverHandler = (req,res)=>{
+    //记录accesslog
+    access(`${req.method} -- ${req.url} -- ${req.headers['user-agent']}`)
+
     //设置返回格式
     res.setHeader('Content-type','application/json')
 
